@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bill" pageWidth="300" pageHeight="900" columnWidth="260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c1ca91fe-8b1d-43e4-886f-69fe8473ba17">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.report.description"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="303"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="686"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cfdb"/>
+	<parameter name="BillID" class="java.lang.Integer"/>
+	<parameter name="sdt" class="java.lang.String"/>
+	<parameter name="diachiquan" class="java.lang.String"/>
+	<parameter name="tienkhach" class="java.lang.Integer"/>
+	<parameter name="namequan" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT f.FoodName AS "Tên Hàng",f.Price AS "Giá", bf.Amount AS "SL",(f.Price * bf.Amount) AS "TT", 
+(SELECT ac.Username 
+FROM Account AS ac 
+WHERE ac.IdStaff =  b.IdStaff) AS "Thu ngân",
+(SELECT tb.TableFoodName FROM TableFood AS tb WHERE tb.TableFoodId = b.TableFoodId) AS "Bàn",
+(SELECT b.TimeIn FROM Bill AS b WHERE b.BillId = $P{BillID} )AS "TimeIn",
+(SELECT b.TimeOut FROM Bill AS b WHERE b.BillId =  $P{BillID} )AS "TimeOut",
+b.Discount 
+
+FROM Bill AS b
+JOIN BillInfo AS bf ON b.BillId = bf.BillId
+JOIN Food AS f ON bf.FoodId = f.FoodId
+WHERE b.BillId = $P{BillID}]]>
+	</queryString>
+	<field name="Tên Hàng" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Tên Hàng"/>
+		<property name="com.jaspersoft.studio.field.label" value="Tên Hàng"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Food"/>
+	</field>
+	<field name="Giá" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Giá"/>
+		<property name="com.jaspersoft.studio.field.label" value="Giá"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Food"/>
+	</field>
+	<field name="SL" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="SL"/>
+		<property name="com.jaspersoft.studio.field.label" value="SL"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="BillInfo"/>
+	</field>
+	<field name="TT" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="TT"/>
+		<property name="com.jaspersoft.studio.field.label" value="TT"/>
+	</field>
+	<field name="Thu ngân" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Thu ngân"/>
+		<property name="com.jaspersoft.studio.field.label" value="Thu ngân"/>
+	</field>
+	<field name="Bàn" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Bàn"/>
+		<property name="com.jaspersoft.studio.field.label" value="Bàn"/>
+	</field>
+	<field name="TimeIn" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="TimeIn"/>
+		<property name="com.jaspersoft.studio.field.label" value="TimeIn"/>
+	</field>
+	<field name="TimeOut" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="TimeOut"/>
+		<property name="com.jaspersoft.studio.field.label" value="TimeOut"/>
+	</field>
+	<field name="Discount" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Discount"/>
+		<property name="com.jaspersoft.studio.field.label" value="Discount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Bill"/>
+	</field>
+	<variable name="TongTien" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TT}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="32" y="13" width="100" height="20" uuid="d6277622-cfa6-433f-bf40-6aeb787f4236">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="13"/>
+				</textElement>
+				<text><![CDATA[ĐC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="32" y="36" width="100" height="20" uuid="c40db251-7b81-41fc-bd81-7ad2ab36dc6a"/>
+				<textElement>
+					<font fontName="Serif" size="13"/>
+				</textElement>
+				<text><![CDATA[SDT:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="31" y="59" width="199" height="1" uuid="7eac5795-c159-432f-ae63-45760d5573a4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="72" y="12" width="158" height="20" uuid="9bab4a19-3f0e-4867-b64f-f8db8178d226">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{diachiquan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="35" width="158" height="20" uuid="5705eca5-2e31-4ea5-a671-9b2ddec4c1eb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sdt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-20" y="-10" width="300" height="20" uuid="507dbf8b-57d9-40c4-a5fb-50634f8ec300">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namequan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="2" width="300" height="20" uuid="092e4ab5-51b6-4767-b434-c18117d32360">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HOÁ ĐƠN THANH TOÁN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="103" y="25" width="31" height="20" uuid="0c92344f-5079-4908-8b5a-38ea78ce0501">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SHĐ:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="47" width="51" height="20" uuid="b588e2ad-511a-4afd-bcd4-d67a41e76fe7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ngày:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="132" y="25" width="53" height="20" uuid="2c951064-0a89-4ae6-b0c6-670b093d8546">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BillID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement x="90" y="47" width="130" height="20" uuid="07381bac-92cf-40d0-867b-6a6885c883e9">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="39" height="20" uuid="77e3d76b-63b5-46cf-afbe-e944ffc88b22">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giờ vào:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="80" width="32" height="20" uuid="35491804-f10a-4300-80a7-dd6ce05b6702">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giờ ra:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="102" width="47" height="20" uuid="b4a335f8-4688-4f77-91e5-bf83980aaa86">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Thu ngân:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="47" y="102" width="100" height="20" uuid="087b38aa-fc80-464a-b527-fb763c6f295c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Thu ngân}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="148" y="102" width="22" height="20" uuid="ea23e09f-1a76-47ed-b867-fad2c10c301d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bàn:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="169" y="102" width="91" height="20" uuid="930c7a44-da27-49c6-a62a-0686210934a2">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Bàn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy h:mm a">
+				<reportElement x="40" y="80" width="107" height="20" uuid="88325827-0c8d-4ee9-9495-d1633b03a0c5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TimeIn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy h:mm a">
+				<reportElement x="179" y="81" width="101" height="20" uuid="2ca3305f-1b82-4c0c-b72a-a80a16b9b9b1">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TimeOut}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="123" width="260" height="1" uuid="b85f201d-a994-456d-98f3-1d85534c1d3b"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="20" uuid="a5ff4b61-9ae8-4a28-9b5e-4a90946057d7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[Tên hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="73" height="20" uuid="36abb7de-ea68-4754-82a6-e85d7756533d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[Đ.giá]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="24" height="20" uuid="bae83154-a587-477d-b4ce-6287abad7bcb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[SL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="0" width="84" height="20" uuid="bd7ff6a8-3610-45dd-8b52-ee237b4d1516">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[T.Tiền]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="21" width="260" height="1" uuid="7faeed9c-400d-4b9e-95a7-7f0403c4d919"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="2" width="79" height="20" uuid="23097e01-616e-4a99-874c-a43aa094fa82">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7c485383-c566-4406-9d41-06a33d4ea52f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tên Hàng}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;#,##0.###">
+				<reportElement x="79" y="2" width="73" height="20" uuid="94acba70-51c9-4374-82ae-84effc54503f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b264e5c5-3c70-43aa-be87-4fbcd32dff71"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Giá}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="2" width="24" height="20" uuid="91f45cfe-3a31-441a-a5ff-554bb593d93b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f224136f-a595-4bc6-b782-40b532811252"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;#,##0.###">
+				<reportElement x="176" y="2" width="84" height="20" uuid="12ff297b-ed81-4e87-9f75-09378f3ada14">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e6356e9b-e86c-4e8c-baeb-b8b0fe044b6c"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="23" width="260" height="1" uuid="19fd12c0-ee79-4950-86fd-89907823050a"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="150" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="1" width="70" height="20" uuid="fe481734-8343-4b84-b8a6-44bc46fd9db3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tổng tiền:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="30" width="70" height="20" uuid="a9159a78-b07c-4a9c-8f27-a39ef1d1ca74"/>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giảm giá:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="88" width="260" height="1" uuid="67015440-5305-47b0-93ad-a804a0851c74"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="-20" y="110" width="300" height="20" uuid="f422c109-2981-4a54-b6cb-efc502910a21">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Xin cảm ơn, hẹn gặp lại quý khách!]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;#,##0.###">
+				<reportElement x="175" y="0" width="84" height="20" uuid="4a412143-fd6f-45f2-9a95-054e8853df7a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TongTien}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##%">
+				<reportElement x="173" y="30" width="86" height="20" uuid="0e58fc44-cb1b-4312-b598-20e6e399df0b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Discount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="62" width="122" height="20" uuid="77e322b8-3625-44d9-83a2-4aad39b5d9cd">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Thành tiền:]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;#,##0.###">
+				<reportElement x="173" y="60" width="86" height="20" uuid="b8dcaa17-3641-40aa-8c0b-3d0885cf1065">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TongTien} - ($V{TongTien} * $F{Discount})]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
