@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -194,6 +195,7 @@ public class PanelBill extends JPanel{
 		layout.putConstraint(SpringLayout.NORTH, lblSum, 5, SpringLayout.NORTH, panePay);
 		
 		btnDiscount = new JButton(new ImageIcon(PanelBill.class.getResource("/imgs/edit-16.png")));
+		btnDiscount.setPressedIcon(new ImageIcon(PanelBill.class.getResource("/imgs/edit2-16.png")));
 		btnDiscount.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnDiscount.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDiscount.setForeground(Color.white);
@@ -202,10 +204,19 @@ public class PanelBill extends JPanel{
 		btnDiscount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(billBo.getBill() != null) {
-					int n = Main.getInputMess("Nhập giảm giá (%):", (int)(billBo.getBill().getDiscount()*100));
-					if(n >= 0) {
-						billBo.updateBill(Main.getAccount().getId(), (((float)n)/100), false);
+					try {
+						String discount = JOptionPane.showInputDialog(
+							null
+							, "Chọn giảm giá:"
+							, "Giảm giá"
+							, JOptionPane.PLAIN_MESSAGE
+							, null
+							, new Object[] {"0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%","80%"}
+							, ((int)(billBo.getBill().getDiscount()*100))+"%").toString().replace("%", "");
+					
+						billBo.updateBill(Main.getAccount().getId(), (Float.parseFloat(discount)/100), false);
 						setlblPay();
+					} catch (Exception e2) {
 					}
 				}
 			}
@@ -354,8 +365,7 @@ public class PanelBill extends JPanel{
 				setVisibleLblPay(false);
 				billBo.addBill(Main.getAccount().getId());
 				PanelTable.setStatusTable(billBo.getTableId(), 1);
-			}
-			return;
+			} else return;
 		}
 		billBo.getBillInforBo().setEdit(true);
 		if(billBo.getBillInforBo().addBillInfor(food.getId())) {

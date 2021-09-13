@@ -212,7 +212,7 @@ public class CafeHome extends JPanel {
 	}
 	
 	public static void setlblBanUse(int k,int n) {
-		lblBanUse.setText("Số bàn đang phục vụ: "+k+"/"+n);
+		lblBanUse.setText("Đang phục vụ: "+k+"/"+n);
 	}
 	
 	public static void setPaneTableDetails(TableFood table) {

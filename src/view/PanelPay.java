@@ -25,7 +25,7 @@ import bean.FormatMoney;
 public class PanelPay extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
-	private static JLabel lblInput;
+	private static JLabel lblInput, lblAmount;
 	private JPanel paneLeft, paneCenter;
 	private ArrayList<MyButton> listBtn;
 	
@@ -64,13 +64,26 @@ public class PanelPay extends JPanel{
 		border.setTitleColor(Color.white);
 		setBorder(new CompoundBorder(border, new EmptyBorder(20, 10, 10, 10)));
 		
+		JPanel panelHead = new JPanel(new BorderLayout());
+		panelHead.setOpaque(false);
+		panelHead.setBorder(new LineBorder(Color.white, 2, true));
+		panelHead.setPreferredSize(new Dimension(0,50));
+		
+		lblAmount = new JLabel();
+		lblAmount.setForeground(Color.yellow);
+		lblAmount.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		lblAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAmount.setVerticalAlignment(SwingConstants.TOP);
+		lblAmount.setPreferredSize(new Dimension(85, 0));
+		panelHead.add(lblAmount, BorderLayout.EAST);
+		
 		lblInput = new JLabel();
 		lblInput.setForeground(Color.GREEN);
 		lblInput.setFont(new Font("Segoe UI", Font.BOLD, 25));
-		lblInput.setBorder(new LineBorder(Color.white, 2, true));
 		lblInput.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblInput, BorderLayout.NORTH);
-		lblInput.setPreferredSize(new Dimension(0,45));
+		panelHead.add(lblInput, BorderLayout.CENTER);
+		
+		add(panelHead, BorderLayout.NORTH);
 		
 		setLeft();
 		setCenter();
@@ -212,28 +225,30 @@ public class PanelPay extends JPanel{
 		});
 		btnPay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String st = lblInput.getText().replaceAll(",", "");
-				CafeHome.showPanelRight(0);
-				if(st.isEmpty() || st  == "") {
-					Main.showMessError("Thanh toán không thành công", "Vui lòng nhập số tiền khách đưa!");
-					return;
+				if(Main.checkConfirm("Thanh toán", "Hoàn tất thanh toán?")) {
+					String st = lblInput.getText().replaceAll(",", "");
+					CafeHome.showPanelRight(0);
+					if(st.isEmpty() || st  == "") {
+						Main.showMessError("Thanh toán không thành công", "Vui lòng nhập số tiền khách đưa!");
+						return;
+					}
+					int k = Integer.parseInt(st);
+					PanelBill.finishPay(k);
 				}
-				int k = Integer.parseInt(st);
-				PanelBill.finishPay(k);
 			}
 		});
 		paneCenter.add(btnPay);
 	}
 	
 	public static void setInput(int pay){
+		lblAmount.setText(FormatMoney.formatVnd(pay));
 		lblInput.setText(FormatMoney.format(pay));
 	}
 	
 	public  void updateInput(String a){
 		String st = lblInput.getText().replaceAll(",", "")+a;
-		if(st.length() < 8){
-			setInput(Integer.parseInt(st));
-		}
+		if(st.length() < 8)
+			lblInput.setText(FormatMoney.format(Integer.parseInt(st)));
 	}
 	
 	ActionListener actionListener = new ActionListener() {
